@@ -1,0 +1,59 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+class Employee {
+    private String name;
+    private int age;
+    private double salary;
+
+    public Employee(String name, int age, double salary) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" + "name='" + name + '\'' + ", age=" + age + ", salary=" + salary + '}';
+    }
+}
+
+public class SortEmployees {
+    public static void main(String[] args) {
+        List<Employee> employees = new ArrayList<>(Arrays.asList(
+            new Employee("Krish", 28, 95000),
+            new Employee("Alice", 25, 80000),
+            new Employee("Bob", 32, 120000),
+            new Employee("Charlie", 22, 60000)
+        ));
+
+        System.out.println("Original list:");
+        employees.forEach(System.out::println);
+
+        employees.sort(Comparator.comparing(Employee::getName));
+        System.out.println("\nSorted by name:");
+        employees.forEach(System.out::println);
+
+        employees.sort(Comparator.comparingInt(Employee::getAge));
+        System.out.println("\nSorted by age:");
+        employees.forEach(System.out::println);
+
+        employees.sort(Comparator.comparingDouble(Employee::getSalary).reversed());
+        System.out.println("\nSorted by salary (descending):");
+        employees.forEach(System.out::println);
+    }
+}
