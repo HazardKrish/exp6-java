@@ -1,0 +1,68 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+class Product {
+    private String name;
+    private double price;
+    private String category;
+
+    public Product(String name, double price, String category) {
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "name='" + name + '\'' + ", price=" + price + ", category='" + category + '\'' + '}';
+    }
+}
+
+public class ProcessProducts {
+    public static void main(String[] args) {
+        List<Product> products = new ArrayList<>(Arrays.asList(
+            new Product("Laptop", 1200.00, "Electronics"),
+            new Product("Smartphone", 800.00, "Electronics"),
+            new Product("Desk Chair", 150.00, "Furniture"),
+            new Product("T-Shirt", 25.00, "Apparel"),
+            new Product("Jeans", 75.00, "Apparel"),
+            new Product("Monitor", 300.00, "Electronics"),
+            new Product("Bookshelf", 200.00, "Furniture")
+        ));
+
+        System.out.println("Products grouped by category:");
+        Map<String, List<Product>> productsByCategory = products.stream()
+                .collect(Collectors.groupingBy(Product::getCategory));
+        productsByCategory.forEach((category, productList) -> {
+            System.out.println("Category: " + category);
+            productList.forEach(p -> System.out.println("  " + p));
+        });
+
+        System.out.println("\nMost expensive product in each category:");
+        Map<String, Optional<Product>> mostExpensiveInCategory = products.stream()
+                .collect(Collectors.groupingBy(
+                        Product::getCategory,
+                        Collectors.maxBy(Comparator.comparingDouble(Product::getPrice))
+                ));
+        mostExpensiveInCategory.forEach((category, product) -> 
+            System.out.println(category + ": " + (product.map(Product::getName).orElse("N/A")))
+        );
+
+        System.out.println("\nAverage price of all products:");
+        double averagePrice = products.stream()
+                .collect(Collectors.averagingDouble(Product::getPrice));
+        System.out.printf("$%.2f%n", averagePrice);
+    }
+}
